@@ -104,6 +104,7 @@ for idx, image_id in enumerate(tqdm(image_ids)):
     model2xml(info["str_id"], 'xml', [1920, 1920], zipped, data_test.class_names, r['scores'])
 
 if args.xml_only:
+    shutil.rmtree('tmp')
     import sys
     sys.exit(0)
 
