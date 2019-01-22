@@ -13,7 +13,7 @@ ADD policy.xml /etc/ImageMagick-6/policy.xml
 # Mask-RCNN fork -- stick to the CPU version for CHTC
 RUN git clone https://github.com/iross/Mask-RCNN-exp
 
-
+WORKDIR /Mask-RCNN-exp/exp/
 RUN git fetch origin && git checkout prep_for_chtc
 RUN sed -i "s|tensorflow-gpu|tensorflow|g" /Mask-RCNN-exp/exp/c_requirements.txt
 RUN conda install --file c_requirements.txt && \
@@ -30,10 +30,6 @@ RUN echo "deb http://ftp.debian.org/debian stretch-backports main" >> /etc/apt/s
 RUN apt update -y
 RUN apt install -y tesseract-ocr-osd/stretch-backports tesseract-ocr-eng/stretch-backports
 #RUN apt install -y tesseract-ocr/stretch-backports
-
-RUN apt-get install -y bsdtar \
-    && cp $(which tar) $(which tar)~ \
-    && ln -sf $(which bsdtar) $(which tar)
 
 RUN mkdir /input && chmod 777 /input
 RUN mkdir /output && chmod 777 /output
