@@ -23,6 +23,9 @@ from voc_utils import ICDAR_convert
 parser = ArgumentParser(description="Run the classifier")
 parser.add_argument("pdfdir", type=str, help="Path to directory of PDFs")
 parser.add_argument('-w', "--weightsdir", default='weights', type=str, help="Path to weights file")
+parser.add_argument('--xml-only', dest='xml_only', action='store_true',
+            help='If true, dump bibjson as part of the input.')
+parser.set_defaults(xml_only=False)
 
 # TODO: This preliminary processing can be made... better? faster, for sure
 
@@ -100,11 +103,16 @@ for idx, image_id in enumerate(tqdm(image_ids)):
     zipped = zip(r["class_ids"], r["rois"])
     model2xml(info["str_id"], 'xml', [1920, 1920], zipped, data_test.class_names, r['scores'])
 
+if args.xml_only:
+    import sys
+    sys.exit(0)
+
 for xml_f in os.listdir('xml'):
     xpath = os.path.join('xml', xml_f)
     l = xml2list(xpath)
     list2html(l, f'{xml_f[:-4]}.png', 'tmp/images', 'html')
-    
+
+
 
 shutil.rmtree('xml')
 shutil.rmtree('tmp')
