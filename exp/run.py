@@ -81,9 +81,9 @@ config = PageConfig()
 model = modellib.MaskRCNN(mode="inference",
                           config=inference_config,
                           model_dir=args.weightsdir)
-model_path = model.find_last()
+#model_path = model.find_last()
 #print("Loading weights from ", model_path)
-model.load_weights(model_path)
+model.load_weights("/Mask-RCNN-exp/exp/weights/pages_uncollapsed20190114T1121/mask_rcnn_pages_uncollapsed_0022.h5")
 data_test = PageDataset('test', 'tmp', 0, nomask=True)
 #data_test.load_page(classes=['Figure', 'Table', 'Equation', 'Body Text'])
 data_test.load_page(classes=list(ICDAR_convert.keys()))
