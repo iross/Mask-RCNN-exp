@@ -35,5 +35,4 @@ RUN mkdir /input && chmod 777 /input
 RUN mkdir /output && chmod 777 /output
 
 WORKDIR /output/
-RUN ln -s /Mask-RCNN/exp/weights
     
