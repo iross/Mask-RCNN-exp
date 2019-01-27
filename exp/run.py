@@ -8,7 +8,7 @@ from argparse import ArgumentParser
 import mrcnn.model as modellib
 from config import PageConfig
 from dataset import PageDataset
-import os
+import os, sys
 import subprocess
 from model2xml import model2xml
 from xml2list import xml2list
@@ -70,7 +70,7 @@ shutil.move('test.txt', 'tmp/test.txt')
 class InferenceConfig(Config):
     NAME = "pages_uncollapsed"
     BACKBONE = "resnet50"
-    GPU_COUNT = 0
+    GPU_COUNT = 1
     IMAGE_MAX_DIM = 1920
     RPN_ANCHOR_SCALES = (32,64, 256, 512,1024)
     NUM_CLASSES = 16
