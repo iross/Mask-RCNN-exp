@@ -70,11 +70,12 @@ shutil.move('test.txt', 'tmp/test.txt')
 class InferenceConfig(Config):
     NAME = "pages_uncollapsed"
     BACKBONE = "resnet50"
-    GPU_COUNT = 1
+    GPU_COUNT = 0
     IMAGE_MAX_DIM = 1920
     RPN_ANCHOR_SCALES = (32,64, 256, 512,1024)
     NUM_CLASSES = 16
     IMAGES_PER_GPU = 1
+
 
 inference_config = InferenceConfig()
 config = PageConfig()
@@ -95,13 +96,17 @@ if not os.path.exists('xml'):
 
 for idx, image_id in enumerate(tqdm(image_ids)):
     # Load image and ground truth data
-    image, image_meta, gt_class_id, gt_bbox, gt_mask = \
-        modellib.load_image_gt(data_test, inference_config,image_id, use_mini_mask=False)
-    results = model.detect([image], verbose=0)
-    r = results[0]
-    info = data_test.image_info[image_id]
-    zipped = zip(r["class_ids"], r["rois"])
-    model2xml(info["str_id"], 'xml', [1920, 1920], zipped, data_test.class_names, r['scores'])
+    try:
+        image, image_meta, gt_class_id, gt_bbox, gt_mask = \
+            modellib.load_image_gt(data_test, inference_config,image_id, use_mini_mask=False)
+        results = model.detect([image], verbose=0)
+        r = results[0]
+        info = data_test.image_info[image_id]
+        zipped = zip(r["class_ids"], r["rois"])
+        model2xml(info["str_id"], 'xml', [1920, 1920], zipped, data_test.class_names, r['scores'])
+    except:
+        print("Issue processing page %s" % image_id)
+        continue
 
 if args.xml_only:
     shutil.rmtree('tmp')
