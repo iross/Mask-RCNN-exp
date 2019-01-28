@@ -16,7 +16,10 @@ RUN git clone https://github.com/iross/Mask-RCNN-exp
 WORKDIR /Mask-RCNN-exp/exp/
 RUN git fetch origin && git checkout prep_for_chtc
 RUN sed -i "s|tensorflow-gpu|tensorflow|g" /Mask-RCNN-exp/exp/c_requirements.txt
-RUN conda install --file c_requirements.txt && \
+RUN sed -i "s|tensorflow==1.12|tensorflow==1.8|g" /Mask-RCNN-exp/exp/c_requirements.txt
+RUN sed -i "s|keras==2.2.4|keras==2.1.6|g" /Mask-RCNN-exp/exp/c_requirements.txt
+RUN conda install python=3.6.8
+RUN pip install -r c_requirements.txt && \
     pip install -r requirements.txt && \
     ./install.sh
 
