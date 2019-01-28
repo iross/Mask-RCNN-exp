@@ -8,7 +8,7 @@ from argparse import ArgumentParser
 import mrcnn.model as modellib
 from config import PageConfig
 from dataset import PageDataset
-import os
+import os, sys
 import subprocess
 from model2xml import model2xml
 from xml2list import xml2list
@@ -70,7 +70,7 @@ shutil.move('test.txt', 'tmp/test.txt')
 class InferenceConfig(Config):
     NAME = "pages_uncollapsed"
     BACKBONE = "resnet50"
-    GPU_COUNT = 0
+    GPU_COUNT = 1
     IMAGE_MAX_DIM = 1920
     RPN_ANCHOR_SCALES = (32,64, 256, 512,1024)
     NUM_CLASSES = 16
@@ -105,7 +105,7 @@ for idx, image_id in enumerate(tqdm(image_ids)):
         zipped = zip(r["class_ids"], r["rois"])
         model2xml(info["str_id"], 'xml', [1920, 1920], zipped, data_test.class_names, r['scores'])
     except:
-        print("Issue processing page %s" % image_id)
+        print("Issue processing page %s (%s)" % (image_id, sys.exc_info()))
         continue
 
 if args.xml_only:
